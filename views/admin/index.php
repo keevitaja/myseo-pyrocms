@@ -6,14 +6,13 @@
     <div class="content">
         <fieldset id="filters">
             <legend>Filters & Settings</legend>
-                <?php echo form_open($this->uri->uri_string() . '/update_settings', 'class="meta_information" id="myseo_settings"') ?>
-                <table class="table-list" cellspacing="0" border="0">
+            <?php echo form_open($this->uri->uri_string() . '/update_settings', 'class="meta_information" id="myseo_settings"') ?>
+                <table class="table-list" cellspacing="0" border="0" style="width: 49%; float: left;">
                     <tr>
-                        <th style="width: 200px;">Name</th>
-                        <th>Value</th>
+                        <th colspan="2">Filters</th>
                     </tr>
                     <tr>
-                        <td>Hide drafts</td>
+                        <td style="width: 200px;">Hide drafts</td>
                         <td><?php echo form_checkbox(array('name' => 'hide_drafts', 'value' => 1, 'checked' => $settings['hide_drafts'])); ?></td>
                     </tr>
                     <tr>
@@ -27,6 +26,19 @@
                     <tr>
                         <td><?php $msg = $this->session->flashdata('settings_update_status'); if($msg) { echo $msg; } else { echo '&nbsp;'; } ?></td>
                         <td><button name="settings_update" type="submit" class="btn blue">Save</button></td>
+                    </tr>
+                </table>
+                <table class="table-list" cellspacing="0" border="0" style="width: 49%;float: right;">
+                    <tr>
+                        <th colspan="2">Settings</th>
+                    </tr>
+                    <tr>
+                        <td style="width: 200px;">Max title length</td>
+                        <td><?php echo form_input(array('name' => 'max_title_len', 'value' => $settings['max_title_len'])); ?></td>
+                    </tr>
+                    <tr>
+                        <td>Max description length</td>
+                        <td><?php echo form_input(array('name' => 'max_desc_len', 'value' => $settings['max_desc_len'])); ?></td>
                     </tr>
                 </table>
             <?php echo form_close(); ?>
@@ -74,12 +86,12 @@
                 $(document).ready(function() {
                     $('input.input_title_<?php echo $page['id']; ?>').simplyCountable({
                         counter:            'span.count_title_<?php echo $page['id']; ?>',
-                        maxCount:           69
+                        maxCount:           <?php echo $settings['max_title_len']; ?>
                     });
 
                     $('textarea.input_description_<?php echo $page['id']; ?>').simplyCountable({
                         counter:            'span.count_description_<?php echo $page['id']; ?>',
-                        maxCount:           156
+                        maxCount:           <?php echo $settings['max_desc_len']; ?>
                     });
                 });
             </script>

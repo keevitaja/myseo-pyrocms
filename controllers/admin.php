@@ -27,7 +27,9 @@ class Admin extends Admin_Controller {
             $settings = array(
                 'hide_drafts' => 1,
                 'top_page' => 0,
-                'filter_by_title' => ''
+                'filter_by_title' => '',
+                'max_title_len' => 69,
+                'max_desc_len' => 156
             );
 
             $this->myseo_m->set_settings($settings);
@@ -98,7 +100,9 @@ class Admin extends Admin_Controller {
         $settings = array(
             'hide_drafts' => ($this->input->post('hide_drafts')) ? 1 : 0,
             'top_page' => (int)$this->input->post('top_page'),
-            'filter_by_title' => trim((string)$this->input->post('filter_by_title'))
+            'filter_by_title' => trim((string)$this->input->post('filter_by_title')),
+            'max_title_len' => (int)$this->input->post('max_title_len'),
+            'max_desc_len' => (int)$this->input->post('max_desc_len')
         );
 
         $result = $this->myseo_m->set_settings($settings);

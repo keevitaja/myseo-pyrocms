@@ -3,6 +3,8 @@
  * MySeo admin controller
  * 2013
  *
+ * https://github.com/keevitaja/myseo-pyrocms
+ *
  * @package     myseo/core
  * @author      Tanel Tammik <keevitaja@gmail.com>
  * @version     master

@@ -1,8 +1,11 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 /**
- * MySeo model 2013
+ * MySeo model
+ * 2013
  *
- * @author 		Keevitaja
+ * @package     myseo/core
+ * @author      Tanel Tammik <keevitaja@gmail.com>
+ * @version     master
  *
  */
 class Myseo_m extends MY_Model

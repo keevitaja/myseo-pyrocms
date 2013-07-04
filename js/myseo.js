@@ -1,7 +1,10 @@
 /**
- * MySeo js 2013
+ * MySeo jquery
+ * 2013
  *
- * @author 		Keevitaja
+ * @package     myseo/core
+ * @author      Tanel Tammik <keevitaja@gmail.com>
+ * @version     master
  *
  */
 

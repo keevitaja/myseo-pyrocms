@@ -1,8 +1,11 @@
 <?php defined('BASEPATH') OR exit('No direct script accsess allowed');
 /**
- * MySeo admin controller 2013
+ * MySeo admin controller
+ * 2013
  *
- * @author		Keevitaja
+ * @package     myseo/core
+ * @author      Tanel Tammik <keevitaja@gmail.com>
+ * @version     master
  *
  */
 class Admin extends Admin_Controller {

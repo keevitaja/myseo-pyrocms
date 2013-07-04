@@ -12,6 +12,10 @@ Tanel Tammik - keevitaja@gmail.com
 
 Install the module and see Admin -> Content -> MySeo
 
+###Update
+
+To update, overwrite the files and delete myseo_settings variable from Admin -> Variables
+
 ###Support
 
 Please see the PyroCMS forum topic

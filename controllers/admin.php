@@ -109,7 +109,7 @@ class Admin extends Admin_Controller {
 
         $result = $this->myseo_m->set_settings($settings);
 
-        // determine request type and return
+        // determine request status and return
         if ($result)
         {
             $msg = '<span style="color: green">Success</span>';

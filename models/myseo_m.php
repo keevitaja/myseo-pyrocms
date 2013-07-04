@@ -12,11 +12,24 @@ class Myseo_m extends MY_Model
 {
     private $settings;
 
+    private $select_fields;
+
     public function __construct()
     {
         parent::__construct();
 
         $this->settings = $this->get_settings();
+
+        $this->select_fields = '
+            id,
+            title,
+            uri,
+            meta_title,
+            meta_keywords,
+            meta_description,
+            meta_robots_no_index,
+            meta_robots_no_follow
+        ';
     }
 
     // gets all pages recursive, order by order
@@ -48,16 +61,8 @@ class Myseo_m extends MY_Model
         if ($this->settings['top_page'] != 0)
         {
             $this->db
-                ->select('
-                    id,
-                    title,
-                    uri,
-                    meta_title,
-                    meta_keywords,
-                    meta_description,
-                    meta_robots_no_index,
-                    meta_robots_no_follow
-                ')->where('id', $page_id);
+                ->select($this->select_fields)
+                ->where('id', $page_id);
 
             // show only if in title
             if ( ! empty($this->settings['filter_by_title']))
@@ -103,16 +108,9 @@ class Myseo_m extends MY_Model
     // gets all children
     public function get_children($page_id)
     {
-        $this->db->select('
-            id,
-            title,
-            uri,
-            meta_title,
-            meta_keywords,
-            meta_description,
-            meta_robots_no_index,
-            meta_robots_no_follow
-            ')->where('parent_id', $page_id);
+        $this->db
+            ->select($this->select_fields)
+            ->where('parent_id', $page_id);
 
         // hide drafts
         if ($this->settings['hide_drafts'] == 1)

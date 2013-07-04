@@ -10,7 +10,16 @@
  */
 class Myseo_m extends MY_Model
 {
-    // gets all pages recrusive, order by order
+    private $settings;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->settings = $this->get_settings();
+    }
+
+    // gets all pages recursive, order by order
     public function get_all_pages_r($page_id = 0, $pages = array())
     {
         foreach ($this->get_children($page_id) as $page)
@@ -35,10 +44,8 @@ class Myseo_m extends MY_Model
     {
         $pages = $this->get_all_pages_r($page_id);
 
-        $settings = $this->get_settings();
-
         // if top page is defined, add page it self
-        if ($settings['top_page'] != 0)
+        if ($this->settings['top_page'] != 0)
         {
             $this->db
                 ->select('
@@ -53,9 +60,9 @@ class Myseo_m extends MY_Model
                 ')->where('id', $page_id);
 
             // show only if in title
-            if ( ! empty($settings['filter_by_title']))
+            if ( ! empty($this->settings['filter_by_title']))
             {
-                $this->db->like('title', $settings['filter_by_title']);
+                $this->db->like('title', $this->settings['filter_by_title']);
             }
 
             $page = $this->db->get('pages')->result_array();
@@ -96,8 +103,6 @@ class Myseo_m extends MY_Model
     // gets all children
     public function get_children($page_id)
     {
-        $settings = $this->get_settings();
-
         $this->db->select('
             id,
             title,
@@ -110,15 +115,15 @@ class Myseo_m extends MY_Model
             ')->where('parent_id', $page_id);
 
         // hide drafts
-        if ($settings['hide_drafts'] == 1)
+        if ($this->settings['hide_drafts'] == 1)
         {
             $this->db->where('status !=', 'draft');
         }
 
         // show only if in title
-        if ( ! empty($settings['filter_by_title']))
+        if ( ! empty($this->settings['filter_by_title']))
         {
-            $this->db->like('title', $settings['filter_by_title']);
+            $this->db->like('title', $this->settings['filter_by_title']);
         }
 
         return $this->db->order_by('order')

@@ -12,24 +12,22 @@ class Myseo_m extends MY_Model
 {
     private $settings;
 
-    private $select_fields;
+    private $select_fields = '
+        id,
+        title,
+        uri,
+        meta_title,
+        meta_keywords,
+        meta_description,
+        meta_robots_no_index,
+        meta_robots_no_follow
+    ';
 
     public function __construct()
     {
         parent::__construct();
 
         $this->settings = $this->get_settings();
-
-        $this->select_fields = '
-            id,
-            title,
-            uri,
-            meta_title,
-            meta_keywords,
-            meta_description,
-            meta_robots_no_index,
-            meta_robots_no_follow
-        ';
     }
 
     // gets all pages recursive, order by order

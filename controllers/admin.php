@@ -17,6 +17,7 @@ class Admin extends Admin_Controller {
         parent::__construct();
 
         $this->load->model('myseo_m');
+        $this->lang->load('myseo');
     }
 
     public function index()
@@ -37,8 +38,15 @@ class Admin extends Admin_Controller {
             $this->myseo_m->set_settings($settings);
         }
 
+        $settings_update_status = $this->session->flashdata('flash_settings_update_status');
+        $meta_update_status = $this->session->flashdata('flash_meta_update_status');
+
+        //var_dump($meta_update_status);die();
+
         $this->template->settings = $settings;
         $this->template->top_pages = $this->myseo_m->get_top_pages();
+        $this->template->settings_update_status = ($settings_update_status) ? $settings_update_status : '';
+        $this->template->meta_update_status = ($meta_update_status) ? $meta_update_status : array();
 
         // get all pages with meta information and pass to view
         $this->template->pages = $this->myseo_m->get_all_pages($settings['top_page']);
@@ -63,6 +71,7 @@ class Admin extends Admin_Controller {
             'meta_robots_no_follow' => ($this->input->post('robots_no_follow')) ? 1 : 0
         );
 
+        // store page data for old keyword hash for later deletion
         $page = $this->db->select('meta_keywords')->where('id', $id)->get('pages')->row_array();
 
         // update
@@ -70,26 +79,26 @@ class Admin extends Admin_Controller {
 
         if ($result)
         {
-            $msg = '<span style="color: green">Success</span>';
+            $update_status = '<span style="color: green">' . lang('myseo:request_msg_success') . '</span>';
 
             // delete old keywords_applied entry
             $this->db->where('hash', $page['meta_keywords'])->delete('keywords_applied');
         }
         else
         {
-            $msg = '<span style="color: red">SQL Error</span>';
+            $update_status = '<span style="color: red">' . lang('myseo:request_msg_sql_error') . '</span>';
         }
 
         // determine request type and return
         if ($this->input->is_ajax_request())
         {
             // return result for ajax
-            echo $msg;
+            echo $update_status;
         }
         else
         {
-            $this->session->set_flashdata('meta_update_status', $msg);
-            redirect('admin/myseo');
+            $this->session->set_flashdata('flash_meta_update_status', array($id => $update_status));
+            redirect('admin/myseo#ID' . $id, 'location');
         }
     }
 
@@ -112,14 +121,14 @@ class Admin extends Admin_Controller {
         // determine request status and return
         if ($result)
         {
-            $msg = '<span style="color: green">Success</span>';
+            $update_status = '<span style="color: green">' . lang('myseo:request_msg_success') . '</span>';
         }
         else
         {
-            $msg = '<span style="color: red">SQL Error</span>';
+            $update_status = '<span style="color: red">' . lang('myseo:request_msg_sql_error') . '</span>';
         }
 
-        $this->session->set_flashdata('settings_update_status', $msg);
-        redirect('admin/myseo');
+        $this->session->set_flashdata('flash_settings_update_status', $update_status);
+        redirect('admin/myseo', 'location');
     }
 }

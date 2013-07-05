@@ -2,7 +2,7 @@
 
 ##Description
 
-Enables admin to edit all pages SEO-related meta information from one place.
+The MySeo module lets site admin edit pages SEO related information, such as meta title, description etc, from one admin page. That means, no more surfing the pages to edit meta information.
 
 ###Developer
 

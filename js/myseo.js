@@ -4,7 +4,7 @@
  *
  * https://github.com/keevitaja/myseo-pyrocms
  *
- * @package     myseo/core
+ * @package     myseo
  * @author      Tanel Tammik <keevitaja@gmail.com>
  * @version     master
  *

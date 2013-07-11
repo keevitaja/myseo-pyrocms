@@ -1,15 +1,19 @@
 <?php defined('BASEPATH') OR exit('No direct script accsess allowed');
+
 /**
- * MySeo admin controller
- * 2013
+ * Myseo - admin controller
  *
- * https://github.com/keevitaja/myseo-pyrocms
+ * Copyright (c) 2013
+ * http://github.com/keevitaja/sidenav-pyrocms
  *
  * @package     myseo
  * @author      Tanel Tammik <keevitaja@gmail.com>
+ * @copyright   Copyright (c) 2013
  * @version     master
+ * @link        http://github.com/keevitaja/myseo-pyrocms
  *
  */
+
 class Admin extends Admin_Controller {
 
     public function __construct()
@@ -20,45 +24,102 @@ class Admin extends Admin_Controller {
         $this->lang->load('myseo');
     }
 
-    public function index()
+    // main controller
+    public function index($offset = 0)
     {
-        // check if settings variable exists, if not create
-        $settings = $this->myseo_m->get_settings();
+        $options = $this->myseo_m->get_options();
+        $update_status = $this->session->flashdata('flash_filters_update_status');
+        list($pages, $count) = $this->myseo_m->get_pages($options['filter_by_top_page'], $offset);
 
-        if (empty($settings))
-        {
-            $settings = array(
-                'hide_drafts' => 1,
-                'top_page' => 0,
-                'filter_by_title' => '',
-                'max_title_len' => 69,
-                'max_desc_len' => 156
-            );
+        $this->template->filters_update_status = ($update_status) ? $update_status : '&nbsp';
 
-            $this->myseo_m->set_settings($settings);
-        }
+        $this->load->library('pagination');
 
-        $settings_update_status = $this->session->flashdata('flash_settings_update_status');
-        $meta_update_status = $this->session->flashdata('flash_meta_update_status');
+        $this->pagination->initialize(array(
+            'base_url' => site_url('admin/myseo'),
+            'total_rows' => $count,
+            'per_page' => $options['pagination_limit']
+        ));
 
-        //var_dump($meta_update_status);die();
 
-        $this->template->settings = $settings;
-        $this->template->top_pages = $this->myseo_m->get_top_pages();
-        $this->template->settings_update_status = ($settings_update_status) ? $settings_update_status : '';
-        $this->template->meta_update_status = ($meta_update_status) ? $meta_update_status : array();
-
-        // get all pages with meta information and pass to view
-        $this->template->pages = $this->myseo_m->get_all_pages($settings['top_page']);
+        $this->template->pagination = $this->pagination->create_links();
 
         $this->template
+            ->set('myseo_options', $options)
+            ->set('top_pages', $this->myseo_m->get_top_pages())
+            ->set('pages', $pages)
+            ->append_css('module::myseo.css')
             ->append_js('module::jquery.simplyCountable.js')
             ->append_js('module::myseo.js')
             ->build('admin/index');
     }
 
-    // updates pages meta information
-    public function update_page()
+    // updates filters
+    public function filters_update()
+    {
+        $filters = array(
+            'hide_drafts' => (int)$this->input->post('hide_drafts'),
+            'filter_by_top_page' => (int)$this->input->post('filter_by_top_page'),
+            'filter_by_title' => (string)$this->input->post('filter_by_title'),
+            'filter_by_uri' => (string)$this->input->post('filter_by_uri'),
+        );
+
+        $result = $this->myseo_m->update_options($filters);
+
+        if ($result)
+        {
+            $update_status = '<span class="myseo-success">Success</span>';
+        }
+        else
+        {
+            $update_status = '<span class="myseo-error">SQL Error</span>';
+        }
+
+        $this->session->set_flashdata('flash_filters_update_status', $update_status);
+        redirect('admin/myseo', 'location');
+    }
+
+    // options controller
+    public function options()
+    {
+        $update_status = $this->session->flashdata('flash_options_update_status');
+        $this->template->options_update_status = ($update_status) ? $update_status : '&nbsp';
+
+        $this->template
+            ->set('myseo_options', $this->myseo_m->get_options())
+            ->append_js('module::myseo.js')
+            ->append_css('module::myseo.css')
+            ->build('admin/options');
+    }
+
+    // update options
+    public function options_update()
+    {
+        $options = array(
+            'max_title_len' => (int)$this->input->post('max_title_len'),
+            'max_desc_len' => (int)$this->input->post('max_desc_len'),
+            'pagination_limit' => (int)$this->input->post('pagination_limit'),
+            'auto_hide_rows' => (int)$this->input->post('auto_hide_rows'),
+            'auto_hide_filters' => (int)$this->input->post('auto_hide_filters'),
+        );
+
+        $result = $this->myseo_m->update_options($options);
+
+        if ($result)
+        {
+            $update_status = '<span class="myseo-success">Success</span>';
+        }
+        else
+        {
+            $update_status = '<span class="myseo-error">SQL Error</span>';
+        }
+
+        $this->session->set_flashdata('flash_options_update_status', $update_status);
+        redirect('admin/myseo/options', 'location');
+    }
+
+    // updates page
+    public function page_update()
     {
         // type casting everything, no validation is needed
         $id = (int)$this->input->post('id');
@@ -79,56 +140,25 @@ class Admin extends Admin_Controller {
 
         if ($result)
         {
-            $update_status = '<span style="color: green">' . lang('myseo:request_msg_success') . '</span>';
+            $update_status = '<span class="myseo-success">' . lang('myseo:request_msg_success') . '</span>';
 
             // delete old keywords_applied entry
             $this->db->where('hash', $page['meta_keywords'])->delete('keywords_applied');
         }
         else
         {
-            $update_status = '<span style="color: red">' . lang('myseo:request_msg_sql_error') . '</span>';
+            $update_status = '<span class="myseo-error">' . lang('myseo:request_msg_sql_error') . '</span>';
         }
 
         // determine request type and return
         if ($this->input->is_ajax_request())
         {
-            // return result for ajax
             echo $update_status;
         }
         else
         {
-            $this->session->set_flashdata('flash_meta_update_status', array($id => $update_status));
+            $this->session->set_flashdata('flash_page_update_status', array($id => $update_status));
             redirect('admin/myseo#ID' . $id, 'location');
         }
-    }
-
-    // update settings in variables
-    public function update_settings()
-    {
-        // delete old entry
-        $this->db->where('name', 'myseo_settings')->delete('variables');
-
-        $settings = array(
-            'hide_drafts' => ($this->input->post('hide_drafts')) ? 1 : 0,
-            'top_page' => (int)$this->input->post('top_page'),
-            'filter_by_title' => trim((string)$this->input->post('filter_by_title')),
-            'max_title_len' => (int)$this->input->post('max_title_len'),
-            'max_desc_len' => (int)$this->input->post('max_desc_len')
-        );
-
-        $result = $this->myseo_m->set_settings($settings);
-
-        // determine request status and return
-        if ($result)
-        {
-            $update_status = '<span style="color: green">' . lang('myseo:request_msg_success') . '</span>';
-        }
-        else
-        {
-            $update_status = '<span style="color: red">' . lang('myseo:request_msg_sql_error') . '</span>';
-        }
-
-        $this->session->set_flashdata('flash_settings_update_status', $update_status);
-        redirect('admin/myseo', 'location');
     }
 }

@@ -24,7 +24,8 @@ table.table-list .myseo-label {
     color: red;
 }
 
-.myseo-page textarea {
+.myseo-page textarea,
+.myseo-page input[type=text] {
     width: 97%;
 }
 

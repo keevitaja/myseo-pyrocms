@@ -14,7 +14,7 @@ Install the module and see Admin -> Content -> MySeo
 
 ###Update
 
-To update, overwrite the files and delete myseo_settings variable from Admin -> Variables
+To update, overwrite the files and reinstall the module.
 
 ###Support
 

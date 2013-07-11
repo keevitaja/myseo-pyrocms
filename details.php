@@ -69,8 +69,8 @@ class Module_Myseo extends Module {
         }
 
         $options = array(
-            'max_title_len' => 70,
-            'max_desc_len' => 170,
+            'max_title_len' => 69,
+            'max_desc_len' => 156,
             'pagination_limit' => 10,
             'hide_drafts' => 1,
             'filter_by_top_page' => -1,

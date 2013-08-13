@@ -59,7 +59,7 @@ class Myseo_pages_m extends MY_Model
         foreach ($children as $page)
         {
             $index[] = array(
-                'page_id' => $page->id,
+                'item_id' => $page->id,
                 'hash' => $hash
             );
 
@@ -82,8 +82,8 @@ class Myseo_pages_m extends MY_Model
         // add top page to index, if not 0
         if ($filters->top_page != 0)
         {
-            $this->db->insert('myseo_pages_index', array(
-                'page_id' => $filters->top_page,
+            $this->db->insert('myseo_index', array(
+                'item_id' => $filters->top_page,
                 'hash' => $hash
             ));
         }
@@ -93,7 +93,7 @@ class Myseo_pages_m extends MY_Model
 
         if ( ! empty($index))
         {
-            $this->db->insert_batch('myseo_pages_index', $index);
+            $this->db->insert_batch('myseo_index', $index);
         }
 
         unset($index);
@@ -115,23 +115,23 @@ class Myseo_pages_m extends MY_Model
         }
 
         $index = $this->db
-            ->select('myseo_pages_index.page_id, myseo_pages_index.hash')
-            ->where('myseo_pages_index.hash', $hash)
-            ->order_by('myseo_pages_index.id')
-            ->join('pages', 'pages.id=myseo_pages_index.page_id', 'left')
-            ->get('myseo_pages_index')
+            ->select('myseo_index.item_id, myseo_index.hash')
+            ->where('myseo_index.hash', $hash)
+            ->order_by('myseo_index.id')
+            ->join('pages', 'pages.id=myseo_index.item_id', 'left')
+            ->get('myseo_index')
             ->result();
 
         // delete full index
-        $this->db->delete('myseo_pages_index', array('hash' => $hash));
+        $this->db->delete('myseo_index', array('hash' => $hash));
 
         // create filtered index
         if ( ! empty($index))
         {
-            $this->db->insert_batch('myseo_pages_index', $index);
+            $this->db->insert_batch('myseo_index', $index);
         }
 
-        return $this->db->where('hash', $hash)->from('myseo_pages_index')->count_all_results();
+        return $this->db->where('hash', $hash)->from('myseo_index')->count_all_results();
     }
 
     // gets all pages
@@ -139,10 +139,10 @@ class Myseo_pages_m extends MY_Model
     {
         $pages = $this->db
             ->select($this->select_fields)
-            ->where('myseo_pages_index.hash', $hash)
-            ->order_by('myseo_pages_index.id')
-            ->join('pages', 'pages.id=myseo_pages_index.page_id', 'left')
-            ->get('myseo_pages_index', $this->options->pagination_limit, $offset)
+            ->where('myseo_index.hash', $hash)
+            ->order_by('myseo_index.id')
+            ->join('pages', 'pages.id=myseo_index.item_id', 'left')
+            ->get('myseo_index', $this->options->pagination_limit, $offset)
             ->result();
 
         // get actual keywords from pyro logic
@@ -163,7 +163,7 @@ class Myseo_pages_m extends MY_Model
 
         $pages = $this->get_pages($hash, $offset);
 
-        $this->db->delete('myseo_pages_index', array('hash' => $hash));
+        $this->db->delete('myseo_index', array('hash' => $hash));
 
         return array($pages, $index_count);
     }

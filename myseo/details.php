@@ -53,9 +53,9 @@ class Module_Myseo extends Module
                 'name' => array('type' => 'VARCHAR', 'constraint' => 32),
                 'value' => array('type' => 'VARCHAR', 'constraint' => 250),
             ),
-            'myseo_pages_index' => array(
+            'myseo_index' => array(
                 'id' => array('type' => 'INT', 'constraint' => 11, 'auto_increment' => true, 'primary' => true),
-                'page_id' => array('type' => 'INT', 'constraint' => 11),
+                'item_id' => array('type' => 'INT', 'constraint' => 11),
                 'hash' => array('type' => 'VARCHAR', 'constraint' => 32),
             ),
             'myseo_posts_meta' => array(
@@ -66,11 +66,6 @@ class Module_Myseo extends Module
                 'description' => array('type' => 'TEXT', 'null' => true),
                 'no_index' => array('type' => 'INT', 'constraint' => 11, 'null' => true),
                 'no_follow' => array('type' => 'INT', 'constraint' => 11, 'null' => true),
-            ),
-            'myseo_posts_index' => array(
-                'id' => array('type' => 'INT', 'constraint' => 11, 'auto_increment' => true, 'primary' => true),
-                'post_id' => array('type' => 'INT', 'constraint' => 11),
-                'hash' => array('type' => 'VARCHAR', 'constraint' => 32),
             ),
         );
 

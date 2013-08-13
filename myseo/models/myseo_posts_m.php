@@ -97,17 +97,17 @@ class Myseo_posts_m extends MY_Model
         {
             $index[] = array(
                 'hash' => $hash,
-                'post_id' => $post->id
+                'item_id' => $post->id
             );
         }
 
         // create filtered index
         if ( ! empty($index))
         {
-            $this->db->insert_batch('myseo_posts_index', $index);
+            $this->db->insert_batch('myseo_index', $index);
         }
 
-        return $this->db->where('hash', $hash)->from('myseo_posts_index')->count_all_results();
+        return $this->db->where('hash', $hash)->from('myseo_index')->count_all_results();
     }
 
     // get posts
@@ -115,11 +115,11 @@ class Myseo_posts_m extends MY_Model
     {
         $posts = $this->db
             ->select($this->select_fields)
-            ->where('myseo_posts_index.hash', $hash)
-            ->join('myseo_posts_meta', 'myseo_posts_index.post_id=myseo_posts_meta.post_id', 'left')
+            ->where('myseo_index.hash', $hash)
+            ->join('myseo_posts_meta', 'myseo_index.item_id=myseo_posts_meta.post_id', 'left')
             ->join('blog', 'blog.id=myseo_posts_meta.post_id', 'left')
-            ->order_by('myseo_posts_index.id')
-            ->get('myseo_posts_index', $this->options->pagination_limit, $offset)->result();
+            ->order_by('myseo_index.id')
+            ->get('myseo_index', $this->options->pagination_limit, $offset)->result();
 
         // get actual keywords from pyro logic
         for ($i = 0;$i < count($posts);$i++)
@@ -143,7 +143,7 @@ class Myseo_posts_m extends MY_Model
         // get post meta
         $posts = $this->get_posts($hash, $offset);
 
-        $this->db->delete('myseo_posts_index', array('hash' => $hash));
+        $this->db->delete('myseo_index', array('hash' => $hash));
 
         return array($posts, $index_count);
     }

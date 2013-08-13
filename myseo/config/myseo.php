@@ -1,5 +1,10 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
+$config['myseo_tables'] = array(
+    'pages' => 'pages',
+    'posts' => 'myseo_posts_meta'
+);
+
 $config['myseo_fields'] = array(
     'pages' => array(
         'title' => 'meta_title',

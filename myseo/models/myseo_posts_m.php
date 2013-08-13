@@ -25,23 +25,6 @@ class Myseo_posts_m extends MY_Model
         $this->options = $this->db->get('myseo_options')->row();
     }
 
-    // get item
-    public function get_item($where, $select = false)
-    {
-        if ($select)
-        {
-            $this->db->select($select);
-        }
-
-        return $this->db->where($where)->get('myseo_posts_meta')->row();
-    }
-
-    // update item
-    public function update_item($metadata, $where)
-    {
-        return $this->db->where($where)->update('myseo_posts_meta', $metadata);
-    }
-
     // get categories
     public function categories()
     {

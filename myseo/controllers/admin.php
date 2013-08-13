@@ -64,7 +64,10 @@ class Admin extends Admin_Controller
 
     public function update($id = 0)
     {
-        $item = $this->myseo_m->get_item(array('id' => $id), $this->fields['keywords']);
+        // get table
+        $table = $this->config->item('myseo_tables');
+
+        $item = $this->db->where('id', $id)->get($table[$this->type])->row();;
 
         // check if page exists, this should not happen!
         if (empty($item))
@@ -81,7 +84,7 @@ class Admin extends Admin_Controller
         );
 
         // update metadata info
-        $this->myseo_m->update_item($metadata, array('id' => $id));
+        $this->db->where('id', $id)->update($table[$this->type], $metadata);
 
         // delete old keyword hash
         $keyword_field =  $this->fields['keywords'];

@@ -25,23 +25,6 @@ class Myseo_pages_m extends MY_Model
         $this->options = $this->db->get('myseo_options')->row();
     }
 
-    // get item
-    public function get_item($where, $select = false)
-    {
-        if ($select)
-        {
-            $this->db->select($select);
-        }
-
-        return $this->db->where($where)->get('pages')->row();
-    }
-
-    // update item
-    public function update_item($metadata, $where)
-    {
-        return $this->db->where($where)->update('pages', $metadata);
-    }
-
     // get top pages
     public function top_pages()
     {

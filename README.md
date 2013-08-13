@@ -18,6 +18,12 @@ To make it work with blog posts, update blog module. Please see the blog.php fil
 
 Admin -> Content -> MySEO
 
+###Blog module
+
+Meta info for a blog post can be edited only from MySeo module, because posts do not really support SEO.
+
+If a post is not modified from MySEO, all meta info will fall back to default behaviour. It is like an extra option.
+
 ###Update
 
 To update, uninstall, overwrite the files and install the module.

@@ -3,6 +3,8 @@
 $lang['myseo:save'] = 'Save';
 $lang['myseo:error:var'] = 'Variable missing or incorrect';
 
+$lang['myseo:filters:update'] = 'Filters updated successfully';
+
 $lang['myseo:fields:title'] = 'Title';
 $lang['myseo:fields:keywords'] = 'Keywords';
 $lang['myseo:fields:desc'] = 'Description';

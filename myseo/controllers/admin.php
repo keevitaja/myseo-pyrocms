@@ -116,6 +116,8 @@ class Admin extends Admin_Controller
                 ->update('myseo_filters');
         }
 
+        $this->session->set_flashdata('success', lang('myseo:filters:update'));
+
         redirect('admin/myseo/' . $this->type, 'location');
     }
 }

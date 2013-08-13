@@ -1,0 +1,33 @@
+.myseo-item {
+    margin-top: 30px;
+}
+
+.myseo-slug {
+    color: #777;
+    font-weight: normal;
+}
+
+tr.myseo-header-row:hover {
+    cursor: pointer;
+}
+
+.myseo-item-hidden tr.myseo-row {
+    display: none;
+}
+
+.myseo-row-label {
+    width: 150px;
+}
+
+input.myseo-input-text,
+textarea.myseo-input-textarea {
+    width: 97%;
+}
+
+.myseo-update-status {
+    color: green;
+}
+
+.myseo-count {
+    font-weight: bold;
+}

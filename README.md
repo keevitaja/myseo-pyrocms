@@ -8,9 +8,9 @@ The MySeo module lets site admin edit pages and posts SEO related information, s
 
 ###Install
 
-Copy folder `myseo` from this repo to you modules folder and install as usual.
+Copy folder `myseo` from this repo to your modules folder and install as usual.
 
-To make MySeo work with blog posts, please see blog.php file. It is part of PyroCMS blog module. You have to hack this file, because PyroCMS core blog module does not have SEO support. Do not ask me why.
+To make MySeo work with blog posts, please see [blog.php](https://github.com/keevitaja/myseo-pyrocms/blob/master/blog.php) file. It is part of PyroCMS blog module. You have to hack this file, because PyroCMS core blog module does not have SEO support. Do not ask me why.
 
 I recommend you do not overwrite the core file, but make the modifications only in `_single_view()` method.
 

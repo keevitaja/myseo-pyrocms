@@ -2,7 +2,7 @@
 
 class Module_Myseo extends Module
 {
-    public $version = '2.0.2';
+    public $version = '2.0.3';
 
     public function info()
     {
